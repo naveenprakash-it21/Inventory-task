@@ -1,0 +1,48 @@
+/* Base styles */
+body {
+    background-color: #f7fafc;
+    color: #2d3748;
+    transition: background-color 0.3s, color 0.3s;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #1a202c !important;
+    color: #434649 !important;
+}
+
+/* Card styles */
+.bg-white {
+    background-color: #ffffff;
+}
+
+.dark-mode .bg-white {
+    background-color: #2d3748;
+}
+
+/* Header gradient override for dark mode */
+header.dark-mode {
+    background: linear-gradient(to right, #2d3748, #4a5568) !important;
+}
+
+/* Table adjustments for dark mode */
+.dark-mode table {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+.dark-mode table th,
+.dark-mode table td {
+    border-color: #4a5568;
+}
+
+/* Input focus styling */
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+}
+
+/* Custom Toastify styling (optional override) */
+.toastify {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

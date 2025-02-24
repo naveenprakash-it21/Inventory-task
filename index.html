@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Management</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <!-- Link to External CSS -->
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-900 text-white py-6 flex justify-between items-center px-8">
+    <h1 class="text-3xl font-extrabold">Inventory Dashboard</h1>
+    <button id="dark-mode-toggle" class="flex items-center space-x-2 bg-white text-blue-500 px-4 py-2 rounded-full shadow-md transition hover:bg-blue-100">
+        <svg id="toggle-icon" class="w-6 h-6 fill-current"  >
+        
+        <!-- Sun icon -->
+        <path d="M12 4.354a1 1 0 011 1V7a1 1 0 11-2 0V5.354a1 1 0 011-1zM12 17a1 1 0 011 1v1.646a1 1 0 11-2 0V18a1 1 0 011-1zM5.354 11a1 1 0 011 1h1.646a1 1 0 110 2H6.354a1 1 0 11-1-1 1 1 0 011-1zM16.354 12a1 1 0 011-1h1.646a1 1 0 110 2h-1.646a1 1 0 01-1-1zM7.222 7.222a1 1 0 011.414 0L10 8.586a1 1 0 01-1.414 1.414L7.222 8.636a1 1 0 010-1.414zM16.364 16.364a1 1 0 011.414 0l1.364 1.364a1 1 0 11-1.414 1.414l-1.364-1.364a1 1 0 010-1.414zM7.222 16.364a1 1 0 010 1.414l-1.364 1.364a1 1 0 11-1.414-1.414l1.364-1.364a1 1 0 011.414 0zM16.364 7.222a1 1 0 010 1.414L15 10a1 1 0 11-1.414-1.414l1.364-1.364a1 1 0 011.414 0zM12 9a3 3 0 100 6 3 3 0 000-6z"/>
+      </svg>
+      <span id="toggle-text">Light Mode</span>
+    </button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-8 py-12">
+
+    <!-- Inventory Form Card -->
+    <section class="mb-12">
+      <div class="bg-white rounded-xl shadow-2xl p-8">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-600">Add New Inventory Item</h2>
+        <form id="inventory-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input type="text" id="item-name" placeholder="Item Name" class="p-3 border rounded-lg" required />
+          <select id="category" class="p-3 border rounded-lg " required>
+            <option>Electronics</option>
+            <option>Furniture</option>
+            <option>Clothing</option>
+          </select>
+          <input type="number" id="quantity" placeholder="Quantity" class="p-3 border rounded-lg   focus:ring-indigo-300" required />
+          <input type="date" id="purchase-date" class="p-3 border rounded-lg  focus:ring-indigo-100" />
+          <input type="text" id="supplier-name" placeholder="Supplier Name" class="p-3 border rounded-lg focus:ring-indigo-300" />
+          <select id="status" class="p-3 border rounded-lg ">
+            <option>In Stock</option>
+            <option>Low Stock</option>
+            <option>Out of Stock</option>
+          </select>
+          <button type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-900 text-white py-3 rounded-full shadow-lg hover:opacity-90 transition">
+            Add Item
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Inventory List Card -->
+    <section>
+      <div class="bg-white rounded-xl shadow-2xl p-8">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-600">Inventory Items</h2>
+        <div class="overflow-x-auto"> 
+          <table class="min-w-full  divide-gray-200">
+            <thead class="bg-gradient-to-r from-blue-600 to-indigo-900 text-white">
+              <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Item Name</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Category</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Quantity</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Purchase Date</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Supplier</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-list">
+              <!-- Dynamically added rows will appear here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toastify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <!-- Link to External JavaScript -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
