@@ -1,12 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Elements
     const darkModeToggle = document.getElementById("dark-mode-toggle");
-    const toggleIcon = document.getElementById("toggle-icon");
     const toggleText = document.getElementById("toggle-text");
     const form = document.getElementById("inventory-form");
     const inventoryList = document.getElementById("inventory-list");
-
-
-
+    const filterCategory = document.getElementById("filter-category");
+    const filterStatus = document.getElementById("filter-status");
+    const sortDateBtn = document.getElementById("sort-date");
+    const sortQuantityBtn = document.getElementById("sort-quantity");
+  
+    // Array to store inventory items
+    let inventoryItems = [];
+  
     // Initialize dark/light mode based on localStorage
     if (localStorage.getItem("darkMode") === "enabled") {
         document.body.classList.add("dark-mode");
@@ -15,8 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.remove("dark-mode");
         toggleText.textContent = "Light Mode";
     }
-
-
+  
     // Toggle dark/light mode with Toastify feedback
     darkModeToggle.addEventListener("click", function () {
         if (document.body.classList.contains("dark-mode")) {
@@ -31,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 position: "center",
                 backgroundColor: "#4CAF50"
             }).showToast();
-        }else {
+        } else {
             document.body.classList.add("dark-mode");
             localStorage.setItem("darkMode", "enabled");
             toggleText.textContent = "Dark Mode";
@@ -45,56 +49,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }).showToast();
         }
     });
-
-
-
-    // Handle form submission for adding a new item
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        // Gather input values
-        const itemName = document.getElementById("item-name").value;
-        const category = document.getElementById("category").value;
-        const quantity = document.getElementById("quantity").value;
-        const purchaseDate = document.getElementById("purchase-date").value;
-        const supplierName = document.getElementById("supplier-name").value;
-        const status = document.getElementById("status").value;
-
-        // Validate required fields
-        if (!itemName || !quantity || isNaN(quantity) || quantity <= 0) {
-            Toastify({
-                text: "Item Name and Quantity are required!",
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "#E74C3C"
-            }).showToast();
-            return;
-        }
-
-        // Create a new table row for the item
-        const row = createRow({ itemName, category, quantity, purchaseDate, supplierName, status });
-        inventoryList.appendChild(row);
-
-        Toastify({
-            text: "Item added successfully!",
-            duration: 1000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "#4CAF50"
-        }).showToast();
-
-        // Reset the form for new entry
-        form.reset();
-    });
-
-    // Function to create a table row element with provided data
-    function createRow(data) {
+  
+    // old - new . edit and updating new
+    function renderInventory() {
+        inventoryList.innerHTML = "";
+        inventoryItems.forEach((item, index) => {
+            inventoryList.appendChild(createRow(item, index));
+        });
+    }
+  
+    // Create table row for an item
+    function createRow(data, index) {
         const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
         const row = document.createElement("tr");
-        row.className = "hover:bg-indigo-300 dark:hover:bg-blue-500 transition";
+        // Add a custom class "dynamic-row" to this row
+        row.className = "hover:bg-blue-200 transition dynamic-row";
         row.innerHTML = `
             <td class="px-6 py-4 font-medium">${itemName}</td>
             <td class="px-6 py-4">${category}</td>
@@ -107,10 +76,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
             </td>
         `;
-
+    
         // Delete functionality
         row.querySelector(".delete-btn").addEventListener("click", function () {
-            row.remove();
+            inventoryItems.splice(index, 1);
+            renderInventory();
             Toastify({
                 text: "Item deleted",
                 duration: 1000,
@@ -120,26 +90,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 backgroundColor: "#E74C3C"
             }).showToast();
         });
-
+    
         // Edit functionality
         row.querySelector(".edit-btn").addEventListener("click", function () {
-            enterEditMode(row);
+            enterEditMode(row, data, index);
         });
-
+    
         return row;
     }
-
-    // Function to switch a row to edit mode
-    function enterEditMode(row) {
-        // Get current values
-        const itemName = row.querySelector("td:nth-child(1)").textContent;
-        const category = row.querySelector("td:nth-child(2)").textContent;
-        const quantity = row.querySelector("td:nth-child(3)").textContent;
-        const purchaseDate = row.querySelector("td:nth-child(4)").textContent;
-        const supplierName = row.querySelector("td:nth-child(5)").textContent;
-        const status = row.querySelector("td:nth-child(6)").textContent;
-
-        // Replace cell contents with input fields
+    
+    
+  
+    // Enter edit mode for a row
+    function enterEditMode(row, data, index) {
+        const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
         row.innerHTML = `
             <td class="px-6 py-4"><input type="text" class="edit-item-name border rounded w-full p-2" value="${itemName}"></td>
             <td class="px-6 py-4">
@@ -164,15 +128,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
             </td>
         `;
-
+  
         // Update functionality
         row.querySelector(".update-btn").addEventListener("click", function () {
-            updateRow(row);
+            updateRow(row, index);
         });
-
-        // Delete in edit mode
+  
+        // Delete functionality in edit mode
         row.querySelector(".delete-btn").addEventListener("click", function () {
-            row.remove();
+            inventoryItems.splice(index, 1);
+            renderInventory();
             Toastify({
                 text: "Item deleted",
                 duration: 1000,
@@ -183,17 +148,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }).showToast();
         });
     }
-
-    // Function to update the row with new values
-    function updateRow(row) {
+  
+    // Update row with new values
+    function updateRow(row, index) {
         const updatedItemName = row.querySelector(".edit-item-name").value;
         const updatedCategory = row.querySelector(".edit-category").value;
         const updatedQuantity = row.querySelector(".edit-quantity").value;
         const updatedPurchaseDate = row.querySelector(".edit-purchase-date").value;
         const updatedSupplierName = row.querySelector(".edit-supplier-name").value;
         const updatedStatus = row.querySelector(".edit-status").value;
-
-        // Validate inputs
+  
         if (!updatedItemName || !updatedQuantity) {
             Toastify({
                 text: "Item Name and Quantity are required!",
@@ -205,37 +169,18 @@ document.addEventListener("DOMContentLoaded", function () {
             }).showToast();
             return;
         }
-
-        // Update row content
-        row.innerHTML = `
-            <td class="px-6 py-4 font-medium">${updatedItemName}</td>
-            <td class="px-6 py-4">${updatedCategory}</td>
-            <td class="px-6 py-4">${updatedQuantity}</td>
-            <td class="px-6 py-4">${updatedPurchaseDate}</td>
-            <td class="px-6 py-4">${updatedSupplierName}</td>
-            <td class="px-6 py-4">${updatedStatus}</td>
-            <td class="px-6 py-4 text-center">
-                <button class="edit-btn bg-green-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-            </td>
-        `;
-
-        // Reattach listeners for updated row
-        row.querySelector(".edit-btn").addEventListener("click", function () {
-            enterEditMode(row);
-        });
-        row.querySelector(".delete-btn").addEventListener("click", function () {
-            row.remove();
-            Toastify({
-                text: "Item deleted",
-                duration: 1000,
-                close: true,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "#E74C3C"
-            }).showToast();
-        });
-
+  
+        inventoryItems[index] = {
+            itemName: updatedItemName,
+            category: updatedCategory,
+            quantity: updatedQuantity,
+            purchaseDate: updatedPurchaseDate,
+            supplierName: updatedSupplierName,
+            status: updatedStatus
+        };
+  
+        renderInventory();
+  
         Toastify({
             text: "Item updated successfully!",
             duration: 1000,
@@ -245,4 +190,68 @@ document.addEventListener("DOMContentLoaded", function () {
             backgroundColor: "#4CAF50"
         }).showToast();
     }
-});
+  
+    // Apply filters
+    function applyFilters() {
+        let filteredItems = [...inventoryItems];
+  
+        const selectedCategory = filterCategory.value;
+        if (selectedCategory) {
+            filteredItems = filteredItems.filter(item => item.category === selectedCategory);
+        }
+  
+        const selectedStatus = filterStatus.value;
+        if (selectedStatus) {
+            filteredItems = filteredItems.filter(item => item.status === selectedStatus);
+        }
+  
+        inventoryList.innerHTML = "";
+        filteredItems.forEach((item, index) => {
+            inventoryList.appendChild(createRow(item, index));
+        });
+    }
+  
+    // Sort inventory by key
+    function sortInventory(key, isNumeric = false) {
+        inventoryItems.sort((a, b) => {
+            if (isNumeric) {
+                return parseInt(a[key]) - parseInt(b[key]);
+            } else {
+                return new Date(a[key]) - new Date(b[key]);
+            }
+        });
+        renderInventory();
+    }
+  
+    // Event Listeners for Filters & Sorting
+    filterCategory.addEventListener("change", applyFilters);
+    filterStatus.addEventListener("change", applyFilters);
+    sortDateBtn.addEventListener("click", () => sortInventory("purchaseDate"));
+    sortQuantityBtn.addEventListener("click", () => sortInventory("quantity", true));
+  
+    // Form submission to add a new item
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+  
+        const newItem = {
+            itemName: document.getElementById("item-name").value,
+            category: document.getElementById("category").value,
+            quantity: document.getElementById("quantity").value,
+            purchaseDate: document.getElementById("purchase-date").value,
+            supplierName: document.getElementById("supplier-name").value,
+            status: document.getElementById("status").value
+        };
+  
+        inventoryItems.push(newItem);
+        renderInventory();
+        form.reset();
+        Toastify({
+            text: "Item added successfully!",
+            duration: 1000,
+            close: true,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "#4CAF50"
+        }).showToast();
+    });
+  });
