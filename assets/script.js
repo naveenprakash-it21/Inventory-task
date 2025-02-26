@@ -8,23 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterStatus = document.getElementById("filter-status");
     const sortDateBtn = document.getElementById("sort-date");
     const sortQuantityBtn = document.getElementById("sort-quantity");
-  
+ 
     // Array to store inventory items
     let inventoryItems = [];
-  
-    // Initialize dark/light mode based on localStorage
-    if (localStorage.getItem("darkMode") === "enabled") {
-        document.body.classList.add("dark-mode");
-        toggleText.textContent = "Dark Mode";
-    } else {
-        document.body.classList.remove("dark-mode");
-        toggleText.textContent = "Light Mode";
-    }
+    
+    // Array to store filtered items for display
+    let filteredItems = [];
   
     // Toggle dark/light mode with Toastify feedback
     darkModeToggle.addEventListener("click", function () {
         if (document.body.classList.contains("dark-mode")) {
-            document.body.classList.remove("dark-mode");
+           document.body.classList.remove("dark-mode");
             localStorage.setItem("darkMode", "disabled");
             toggleText.textContent = "Light Mode";
             Toastify({
@@ -50,14 +44,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
   
-    // old - new . edit and updating new
+    // Edit
     function renderInventory() {
         inventoryList.innerHTML = "";
-        inventoryItems.forEach((item, index) => {
-            inventoryList.appendChild(createRow(item, index));
+        filteredItems.forEach((item, index) => {
+            // Find the original index in the inventoryItems array
+            const originalIndex = inventoryItems.findIndex(invItem => 
+                invItem.itemName === item.itemName && 
+                invItem.purchaseDate === item.purchaseDate &&
+                invItem.supplierName === item.supplierName
+            );
+            inventoryList.appendChild(createRow(item, originalIndex));
         });
     }
-  
+
     // Create table row for an item
     function createRow(data, index) {
         const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Delete functionality
         row.querySelector(".delete-btn").addEventListener("click", function () {
             inventoryItems.splice(index, 1);
-            renderInventory();
+            applyFilters(); // Re-apply filters after deletion
             Toastify({
                 text: "Item deleted",
                 duration: 1000,
@@ -99,8 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return row;
     }
     
-    
-  
     // Enter edit mode for a row
     function enterEditMode(row, data, index) {
         const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
@@ -137,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Delete functionality in edit mode
         row.querySelector(".delete-btn").addEventListener("click", function () {
             inventoryItems.splice(index, 1);
-            renderInventory();
+            applyFilters(); // Re-apply filters after deletion
             Toastify({
                 text: "Item deleted",
                 duration: 1000,
@@ -158,18 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const updatedSupplierName = row.querySelector(".edit-supplier-name").value;
         const updatedStatus = row.querySelector(".edit-status").value;
   
-        if (!updatedItemName || !updatedQuantity) {
-            Toastify({
-                text: "Item Name and Quantity are required!",
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "#E74C3C"
-            }).showToast();
-            return;
-        }
-  
         inventoryItems[index] = {
             itemName: updatedItemName,
             category: updatedCategory,
@@ -179,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
             status: updatedStatus
         };
   
-        renderInventory();
+        applyFilters(); // Re-apply filters after update
   
         Toastify({
             text: "Item updated successfully!",
@@ -193,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Apply filters
     function applyFilters() {
-        let filteredItems = [...inventoryItems];
+        filteredItems = [...inventoryItems];
   
         const selectedCategory = filterCategory.value;
         if (selectedCategory) {
@@ -205,15 +191,13 @@ document.addEventListener("DOMContentLoaded", function () {
             filteredItems = filteredItems.filter(item => item.status === selectedStatus);
         }
   
-        inventoryList.innerHTML = "";
-        filteredItems.forEach((item, index) => {
-            inventoryList.appendChild(createRow(item, index));
-        });
+        renderInventory();
     }
   
     // Sort inventory by key
     function sortInventory(key, isNumeric = false) {
-        inventoryItems.sort((a, b) => {
+        // Sort the filtered items, not the original inventory
+        filteredItems.sort((a, b) => {
             if (isNumeric) {
                 return parseInt(a[key]) - parseInt(b[key]);
             } else {
@@ -243,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
   
         inventoryItems.push(newItem);
-        renderInventory();
+        applyFilters(); // Re-apply filters after adding a new item
         form.reset();
         Toastify({
             text: "Item added successfully!",
@@ -254,4 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
             backgroundColor: "#4CAF50"
         }).showToast();
     });
-  });
+    
+    // Initialize the filteredItems array
+    filteredItems = [...inventoryItems];
+});

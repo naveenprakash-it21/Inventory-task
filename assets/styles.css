@@ -1,30 +1,23 @@
-/* Base styles */
 body {
     background-color: #f7fafc;
     color: #2d3748;
     transition: background-color 0.5s;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
-
-/* Dark mode styles */
 .dark-mode {
     background-color: #1a202c !important;
     color: #cbd5e0 !important;
 }
-
-/* Header styles */
 header {
     position:static;
 }
-
-/* Card styles */
+/* Card */
 .bg-white {
     background-color: #ffffff;
 }
 .dark-mode .bg-white {
     background-color: #2d3748;
 }
-
 /* Table styles */
 table th,
 table td {
