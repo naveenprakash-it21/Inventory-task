@@ -12,19 +12,18 @@
 <body class="bg-gray-100">
   <header class="bg-gradient-to-r from-purple-700 to-blue-600 text-white py-6 px-8 flex justify-between items-center w-full">
   <h1 class="text-3xl font-extrabold tracking-wide">Inventory Dashboard</h1>
-  <button id="dark-mode-toggle" class="flex items-center bg-white text-blue-600 px-4 py-2 rounded-full shadow-md hover:bg-gray-100 transition">
-    <span id="toggle-text" class="text-black">Light Mode</span>
+  <button id="dark-mode-toggle" class="flex items-center bg-white text-black px-4 py-2 rounded-full shadow-md hover:bg-gray-500 transition">
+    <span id="toggle-text" class="text-blue">Light Mode</span>
   </button>
 </header>
 
-  
   <div class="flex flex-col md:flex-row">
 
     <aside class=" bg-white shadow-lg p-6 m-6 rounded-lg">
-      <h2 class="text-2xl font-bold mb-4 text-indigo-600">Filters & Sorting</h2>
+      <h2 class="text-2xl font-bold mb-5 text-black">Filters & Sorting</h2>
       <div class="mb-4">
-        <label for="filter-category" class="text-sm font-medium mb-4 text-indigo-600">Category</label>
-        <select id="filter-category" class="w-full p-2 text-black border rounded">
+        <label for="filter-category" class=" font-medium mb-4 text-black">Category</label>
+        <select id="filter-category" class="w-full p-2 text-gray-400 border rounded">
           <option value="">All Categories</option>
           <option value="Electronics">Electronics</option>
           <option value="Furniture">Furniture</option>
@@ -32,8 +31,8 @@
         </select>
       </div>
       <div class="mb-4">
-        <label for="filter-status" class="text-sm font-medium mb-4 text-indigo-600">Status</label>
-        <select id="filter-status" class="w-full p-2 text-black border rounded">
+        <label for="filter-status" class="font-medium mb-4 text-black">Status</label>
+        <select id="filter-status" class="w-full p-2 text-gray-400 border rounded">
           <option value="">All Status</option>
           <option value="In Stock">In Stock</option>
           <option value="Low Stock">Low Stock</option>
@@ -41,8 +40,8 @@
         </select>
       </div>
       <div class="mb-4">
-        <button id="sort-date" class="w-full bg-blue-500 text-white p-2 rounded mb-2 hover:bg-blue-600 transition">Sort by Date</button>
-        <button id="sort-quantity" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition">Sort by Quantity</button>
+        <button id="sort-date" class="w-full bg-blue-500 text-white p-2 rounded-full mb-2 hover:bg-blue-600 transition">Sort by Date</button>
+        <button id="sort-quantity" class="w-full bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition">Sort by Quantity</button>
       </div>
     </aside>
 
@@ -51,22 +50,46 @@
       <!-- Inventory Form Card -->
 <section class="mb-12">
   <div class="bg-white rounded-xl shadow-2xl p-4 md:p-8">
-    <h2 class="text-2xl font-bold mb-4 text-indigo-600">Add New Inventory Item</h2>
+    <h2 class="text-2xl font-bold mb-4 text-black">Add New Inventory Item</h2>
     <form id="inventory-form" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-      <input type="text" id="item-name" placeholder="Item Name" class="p-3 border text-black rounded-lg w-full" required />
-      <select id="category" class="p-3 border text-black rounded-lg w-full" required>
-        <option>Electronics</option>
-        <option>Furniture</option>
-        <option>Clothing</option>
-      </select>
-      <input type="number" id="quantity" placeholder="Quantity" class="p-3 border text-black rounded-lg w-full " required />
-      <input type="date" id="purchase-date" class="p-3 border text-black rounded-lg w-full " />
-      <input type="text" id="supplier-name" placeholder="Supplier Name" class="p-3 border text-black rounded-lg w-full" />
-      <select id="status" class="p-3 border text-black rounded-lg w-full">
-        <option>In Stock</option>
-        <option>Low Stock</option>
-        <option>Out of Stock</option>
-      </select>
+      <div>
+        <label for="item-name" class="block text-large font-large text-black mb-1">Item Name</label>
+        <input type="text" id="item-name" placeholder="Item Name" class="p-3 border text-black rounded-lg w-full" required />
+      </div>
+      
+      <div>
+        <label for="category" class="block text-large font-medium text-black mb-1">Category</label>
+        <select id="category" class="p-3 border text-gray-400 rounded-lg w-full" required>
+          <option>Electronics</option>
+          <option>Furniture</option>
+          <option>Clothing</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="quantity" class="block text-large font-medium text-black mb-1">Quantity</label>
+        <input type="number" id="quantity" placeholder="Quantity" class="p-3 border text-black rounded-lg w-full" required />
+      </div>
+      
+      <div>
+        <label for="purchase-date" class="block text-large font-medium text-black mb-1">Purchase Date</label>
+        <input type="date" id="purchase-date" class="p-3 border text-gray-400 rounded-lg w-full" />
+      </div>
+      
+      <div>
+        <label for="supplier-name" class="block text-large font-medium text-black mb-1">Supplier Name</label>
+        <input type="text" id="supplier-name" placeholder="Supplier Name" class="p-3 border text-black rounded-lg w-full" />
+      </div>
+      
+      <div>
+        <label for="status" class="block text-large font-medium text-black mb-1">Status</label>
+        <select id="status" class="p-3 border text-gray-400 rounded-lg w-full">
+          <option>In Stock</option>
+          <option>Low Stock</option>
+          <option>Out of Stock</option>
+        </select>
+      </div>
+      
       <button type="submit" class="md:col-span-2 bg-gradient-to-r from-blue-500 to-indigo-900 text-white py-3 rounded-full shadow-lg hover:opacity-80 transition w-half">
         Add Item
       </button>
@@ -77,18 +100,18 @@
   <!-- Inventory List Card -->
     <section>
       <div class="bg-white rounded-xl shadow-2xl p-6">
-        <h2 class="text-2xl font-bold mb-4 text-indigo-600">Inventory Items</h2>
+        <h2 class="text-2xl font-bold mb-4 text-black">Inventory Items</h2>
         <div class="overflow-x-auto">
           <table class="min-w-full ">
             <thead class="bg-gradient-to-r from-blue-600 to-indigo-900 text-white">
               <tr>
-                <th class="text-center text-sm font-bold">Item Name</th>
-                <th class="text-center text-sm font-bold">Category</th>
-                <th class="text-center text-sm font-bold">Quantity</th>
-                <th class="text-center text-sm font-bold">Purchase Date</th>
-                <th class="text-center text-sm font-bold">Supplier</th>
-                <th class="text-center text-sm font-bold">Status</th>
-                <th class="text-center text-sm font-bold">Actions</th>
+                <th class="text-left text-sm font-bold">Item Name</th>
+                <th class="text-left text-sm font-bold">Category</th>
+                <th class="text-left text-sm font-bold">Quantity</th>
+                <th class="text-left text-sm font-bold">Purchase Date</th>
+                <th class="text-left text-sm font-bold">Supplier</th>
+                <th class="text-left text-sm font-bold">Status</th>
+                <th class="text-left text-sm font-bold">Actions</th>
               </tr>
             </thead>
             <tbody id="inventory-list">
@@ -104,4 +127,4 @@
   <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="assets/script.js"></script>
 </body>
-</html>
+</html> 

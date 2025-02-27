@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterStatus = document.getElementById("filter-status");
     const sortDateBtn = document.getElementById("sort-date");
     const sortQuantityBtn = document.getElementById("sort-quantity");
- 
+
     // Array to store inventory items
     let inventoryItems = [];
     
@@ -64,19 +64,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const row = document.createElement("tr");
         // Add a custom class "dynamic-row" to this row
         row.className = "hover:bg-blue-200 transition dynamic-row";
-        row.innerHTML = `
-            <td class="px-6 py-4 font-medium">${itemName}</td>
-            <td class="px-6 py-4">${category}</td>
-            <td class="px-6 py-4">${quantity}</td>
-            <td class="px-6 py-4">${purchaseDate}</td>
-            <td class="px-6 py-4">${supplierName}</td>
-            <td class="px-6 py-4">${status}</td>
-            <td class="px-6 py-4 text-center">
-                <button class="edit-btn bg-green-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-            </td>
-        `;
-    
+        // In the createRow function
+row.innerHTML = `
+<td class="px-6 py-4 font-medium">${itemName}</td>
+<td class="px-6 py-4">${category}</td>
+<td class="px-6 py-4">${quantity}</td>
+<td class="px-6 py-4">${purchaseDate}</td>
+<td class="px-6 py-4">${supplierName}</td>
+<td class="px-6 py-4">${status}</td>
+<td class="px-6 py-4 text-center">
+    <div class="flex justify-center space-x-2">
+        <button class="edit-btn bg-green-500 text-white px-3 py-1 rounded">Edit</button>
+        <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+    </div>
+</td>
+`;
+
         // Delete functionality
         row.querySelector(".delete-btn").addEventListener("click", function () {
             inventoryItems.splice(index, 1);
@@ -102,30 +105,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Enter edit mode for a row
     function enterEditMode(row, data, index) {
         const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
-        row.innerHTML = `
-            <td class="px-6 py-4"><input type="text" class="edit-item-name border rounded w-full p-2" value="${itemName}"></td>
-            <td class="px-6 py-4">
-                <select class="edit-category border rounded w-full p-2">
-                    <option ${category === "Electronics" ? "selected" : ""}>Electronics</option>
-                    <option ${category === "Furniture" ? "selected" : ""}>Furniture</option>
-                    <option ${category === "Clothing" ? "selected" : ""}>Clothing</option>
-                </select>
-            </td>
-            <td class="px-6 py-4"><input type="number" class="edit-quantity border rounded w-full p-2" value="${quantity}"></td>
-            <td class="px-6 py-4"><input type="date" class="edit-purchase-date border rounded w-full p-2" value="${purchaseDate}"></td>
-            <td class="px-6 py-4"><input type="text" class="edit-supplier-name border rounded w-full p-2" value="${supplierName}"></td>
-            <td class="px-6 py-4">
-                <select class="edit-status border rounded w-full p-2">
-                    <option ${status === "In Stock" ? "selected" : ""}>In Stock</option>
-                    <option ${status === "Low Stock" ? "selected" : ""}>Low Stock</option>
-                    <option ${status === "Out of Stock" ? "selected" : ""}>Out of Stock</option>
-                </select>
-            </td>
-            <td class="px-6 py-4 text-center">
-                <button class="update-btn bg-blue-500 text-white px-3 py-1 rounded mr-2">Update</button>
-                <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-            </td>
-        `;
+        // Change this part in the enterEditMode function
+row.innerHTML = `
+<td class="px-6 py-4"><input type="text" class="edit-item-name border rounded w-full  w-12.1 p-0.75 sd text-center" value="${itemName}"></td>
+<td class="px-6 py-4">
+    <select class="edit-category border rounded w-full  w-12.1 p-2 sd">
+        <option ${category === "Electronics" ? "selected" : ""}>Electronics</option>
+        <option ${category === "Furniture" ? "selected" : ""}>Furniture</option>
+        <option ${category === "Clothing" ? "selected" : ""}>Clothing</option>
+    </select>
+</td>
+<td class="px-6 py-4"><input type="number" class="edit-quantity border rounded w-full w-12.1 p-0.75 text-center" value="${quantity}"></td>
+<td class="px-6 py-4"><input type="date" class="edit-purchase-date border rounded w-full w-12.1 p-0.75 text-center" value="${purchaseDate}"></td>
+<td class="px-6 py-4"><input type="text" class="edit-supplier-name border rounded w-full w-12.1 p-0.75 text-center" value="${supplierName}"></td>
+<td class="px-6 py-4">
+    <select class="edit-status border rounded w-full w-12.1 p-0.75 text-center">
+        <option ${status === "In Stock" ? "selected" : ""}>In Stock</option>
+        <option ${status === "Low Stock" ? "selected" : ""}>Low Stock</option>
+        <option ${status === "Out of Stock" ? "selected" : ""}>Out of Stock</option>
+    </select>
+</td>
+<td class="px-6 py-4 text-center">
+    <div class="flex justify-center space-x-2">
+        <button class="update-btn bg-blue-500 text-white px-3 py-1 rounded">Update</button>
+        <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+    </div>
+</td>
+`;
   
         // Update functionality
         row.querySelector(".update-btn").addEventListener("click", function () {

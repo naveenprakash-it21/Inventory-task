@@ -5,18 +5,23 @@ body {
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 .dark-mode {
-    background-color: #1a202c !important;
+    background-color: #171616 !important;
     color: #cbd5e0 !important;
 }
 header {
     position:static;
 }
 /* Card */
-.bg-white {
-    background-color: #ffffff;
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode p, 
+.dark-mode span,
+.dark-mode label,
+.dark-mode th {
+    color: #ffffff !important;
 }
 .dark-mode .bg-white {
-    background-color: #2d3748;
+    background-color: #2f2e2e;
 }
 /* Table styles */
 table th,
