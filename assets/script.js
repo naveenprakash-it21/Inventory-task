@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Array to store filtered items for display
     let filteredItems = [];
   
+    document.getElementById("purchase-date").valueAsDate = new Date();
+    
     // Toggle dark/light mode with Toastify feedback
     darkModeToggle.addEventListener("click", function () {
         if (document.body.classList.contains("dark-mode")) {
@@ -44,18 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
   
-    // Edit
+    // Render inventory with "No data found" message when empty
     function renderInventory() {
         inventoryList.innerHTML = "";
-        filteredItems.forEach((item, index) => {
-            // Find the original index in the inventoryItems array
-            const originalIndex = inventoryItems.findIndex(invItem => 
-                invItem.itemName === item.itemName && 
-                invItem.purchaseDate === item.purchaseDate &&
-                invItem.supplierName === item.supplierName
-            );
-            inventoryList.appendChild(createRow(item, originalIndex));
-        });
+        
+        if (filteredItems.length === 0) {
+            // Create a "No data found" row that spans all columns
+            const noDataRow = document.createElement("tr");
+            noDataRow.innerHTML = `
+                <td colspan="7" class="px-6 py-8 text-center font-medium text-lg">
+                    No data found
+                </td>
+            `;
+            inventoryList.appendChild(noDataRow);
+        } else {
+            filteredItems.forEach((item, index) => {
+                // Find the original index in the inventoryItems array
+                const originalIndex = inventoryItems.findIndex(invItem => 
+                    invItem.itemName === item.itemName && 
+                    invItem.purchaseDate === item.purchaseDate &&
+                    invItem.supplierName === item.supplierName
+                );
+                inventoryList.appendChild(createRow(item, originalIndex));
+            });
+        }
     }
 
     // Create table row for an item
@@ -65,20 +79,20 @@ document.addEventListener("DOMContentLoaded", function () {
         // Add a custom class "dynamic-row" to this row
         row.className = "hover:bg-blue-200 transition dynamic-row";
         // In the createRow function
-row.innerHTML = `
-<td class="px-6 py-4 font-medium">${itemName}</td>
-<td class="px-6 py-4">${category}</td>
-<td class="px-6 py-4">${quantity}</td>
-<td class="px-6 py-4">${purchaseDate}</td>
-<td class="px-6 py-4">${supplierName}</td>
-<td class="px-6 py-4">${status}</td>
-<td class="px-6 py-4 text-center">
-    <div class="flex justify-center space-x-2">
-        <button class="edit-btn bg-green-500 text-white px-3 py-1 rounded">Edit</button>
-        <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-    </div>
-</td>
-`;
+        row.innerHTML = `
+            <td class="px-6 py-4 font-medium">${itemName}</td>
+            <td class="px-6 py-4">${category}</td>
+            <td class="px-6 py-4">${quantity}</td>
+            <td class="px-6 py-4">${purchaseDate}</td>
+            <td class="px-6 py-4">${supplierName}</td>
+            <td class="px-6 py-4">${status}</td>
+            <td class="px-6 py-4 text-center">
+                <div class="flex justify-center space-x-2">
+                    <button class="edit-btn bg-green-500 text-white px-3 py-1 rounded">Edit</button>
+                    <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                </div>
+            </td>
+        `;
 
         // Delete functionality
         row.querySelector(".delete-btn").addEventListener("click", function () {
@@ -106,32 +120,32 @@ row.innerHTML = `
     function enterEditMode(row, data, index) {
         const { itemName, category, quantity, purchaseDate, supplierName, status } = data;
         // Change this part in the enterEditMode function
-row.innerHTML = `
-<td class="px-6 py-4"><input type="text" class="edit-item-name border rounded w-full  w-12.1 p-0.75 sd text-center" value="${itemName}"></td>
-<td class="px-6 py-4">
-    <select class="edit-category border rounded w-full  w-12.1 p-2 sd">
-        <option ${category === "Electronics" ? "selected" : ""}>Electronics</option>
-        <option ${category === "Furniture" ? "selected" : ""}>Furniture</option>
-        <option ${category === "Clothing" ? "selected" : ""}>Clothing</option>
-    </select>
-</td>
-<td class="px-6 py-4"><input type="number" class="edit-quantity border rounded w-full w-12.1 p-0.75 text-center" value="${quantity}"></td>
-<td class="px-6 py-4"><input type="date" class="edit-purchase-date border rounded w-full w-12.1 p-0.75 text-center" value="${purchaseDate}"></td>
-<td class="px-6 py-4"><input type="text" class="edit-supplier-name border rounded w-full w-12.1 p-0.75 text-center" value="${supplierName}"></td>
-<td class="px-6 py-4">
-    <select class="edit-status border rounded w-full w-12.1 p-0.75 text-center">
-        <option ${status === "In Stock" ? "selected" : ""}>In Stock</option>
-        <option ${status === "Low Stock" ? "selected" : ""}>Low Stock</option>
-        <option ${status === "Out of Stock" ? "selected" : ""}>Out of Stock</option>
-    </select>
-</td>
-<td class="px-6 py-4 text-center">
-    <div class="flex justify-center space-x-2">
-        <button class="update-btn bg-blue-500 text-white px-3 py-1 rounded">Update</button>
-        <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-    </div>
-</td>
-`;
+        row.innerHTML = `
+            <td class="px-6 py-4"><input type="text" class="edit-item-name border rounded w-full  w-12.1 p-0.75 sd text-center" value="${itemName}"></td>
+            <td class="px-6 py-4">
+                <select class="edit-category border rounded w-full  w-12.1 p-2 sd">
+                    <option ${category === "Electronics" ? "selected" : ""}>Electronics</option>
+                    <option ${category === "Furniture" ? "selected" : ""}>Furniture</option>
+                    <option ${category === "Clothing" ? "selected" : ""}>Clothing</option>
+                </select>
+            </td>
+            <td class="px-6 py-4"><input type="number" class="edit-quantity border rounded w-full w-12.1 p-0.75 text-center" value="${quantity}"></td>
+            <td class="px-6 py-4"><input type="date" class="edit-purchase-date border rounded w-full w-12.1 p-0.75 text-center" value="${purchaseDate}"></td>
+            <td class="px-6 py-4"><input type="text" class="edit-supplier-name border rounded w-full w-12.1 p-0.75 text-center" value="${supplierName}"></td>
+            <td class="px-6 py-4">
+                <select class="edit-status border rounded w-full w-12.1 p-0.75 text-center">
+                    <option ${status === "In Stock" ? "selected" : ""}>In Stock</option>
+                    <option ${status === "Low Stock" ? "selected" : ""}>Low Stock</option>
+                    <option ${status === "Out of Stock" ? "selected" : ""}>Out of Stock</option>
+                </select>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <div class="flex justify-center space-x-2">
+                    <button class="update-btn bg-blue-500 text-white px-3 py-1 rounded">Update</button>
+                    <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                </div>
+            </td>
+        `;
   
         // Update functionality
         row.querySelector(".update-btn").addEventListener("click", function () {
@@ -247,4 +261,7 @@ row.innerHTML = `
     
     // Initialize the filteredItems array
     filteredItems = [...inventoryItems];
+    
+    // Initial render to show "No data found" on page load
+    renderInventory();
 });
